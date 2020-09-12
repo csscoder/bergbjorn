@@ -1,0 +1,15 @@
+///* footer */
+///***********************************************/
+.footer {
+  $self: &;
+
+  &__item {
+    font-size: 12px;
+    font-weight: 500;
+
+    &-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+  }
+}

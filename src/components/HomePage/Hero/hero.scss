@@ -1,0 +1,19 @@
+///* hero */
+///***********************************************/
+.hero {
+  $self: &;
+  background-image: url('../img/forside-ski.jpg');
+  background-size: cover;
+  min-height: 500px;
+  background-position: 50% 0;
+
+  @include mq(lg) {
+    min-height: 770px;
+    background-position: 50% 100%;
+  }
+
+  &__title {
+    line-height: 1;
+    font-weight: 500;
+  }
+}

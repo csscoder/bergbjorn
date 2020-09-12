@@ -1,0 +1,21 @@
+body, .navbar {
+  min-width: 320px;
+}
+
+// for scaling font sizes
+* {
+  --ssfz: calc(var(--minfz) * 1px);
+}
+
+@include mq(#{$ss-start-step-font-scale}) {
+  * {
+    --ssfz: calc(((var(--maxfz) - var(--minfz)) / (#{($_font-scale-var-max-width - $_font-scale-var-min-width) / 100 })) * 1vw + (var(--minfz) - ((var(--maxfz) - var(--minfz)) / (#{$_font-scale-var-max-width - $_font-scale-var-min-width})) * #{$_font-scale-var-min-width}) * 1px);
+  }
+}
+
+@include mq(#{$ss-end-step-font-scale}){
+  * {
+    --ssfz: calc(var(--maxfz) * 1px);
+  }
+}
+

@@ -1,0 +1,52 @@
+///* courses */
+///***********************************************/
+.courses {
+  $self: &;
+  @include mq(lg) {
+    min-height: 800px;
+  }
+
+  &:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url('../img/kurs.jpg'), #769af8;
+    background-position: 50% 50%;
+    background-size: cover;
+    background-blend-mode: multiply;
+    opacity: .9;
+  }
+
+  &__item {
+
+    &:before {
+      content: '';
+      display: block;
+      padding-top: 106%;
+    }
+
+    &-cover {
+      top: 0;
+      left: 0;
+      opacity: .95;
+      transition: $transition-fade;
+    }
+
+    &:hover {
+      #{$self}__item-cover {
+        opacity: 1;
+      }
+    }
+
+    &-button {
+      bottom: 80px;
+      left: 40px;
+      right: 40px;
+    }
+  }
+
+}

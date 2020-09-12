@@ -1,0 +1,69 @@
+///* Bootstrap variables */
+///***********************************************/
+//colors
+$primary: #1a2845;
+$body-color: #757c8f;
+$headings-color: #1e2326;
+$light: #e9ecef;
+$link-color: #288bff;
+
+// new theme colors
+$theme-colors: (
+  "light-100":    rgba(#fff, .3)
+);
+
+// fonts
+$font-family-base: 'Barlow', sans-serif;
+$font-family-serif: 'Playfair Display', serif;
+
+// containers
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px
+);
+
+// btn
+$input-btn-padding-y: 1rem;
+$btn-font-size: 13px;
+
+// nav bar
+$navbar-dark-toggler-border-color: rgba(#fff, .6);
+$navbar-toggler-padding-y: .2rem;
+$navbar-toggler-padding-x: .3rem;
+$navbar-toggler-font-size: 14px;
+
+//hr
+$hr-border-color: #f5f5f5;
+
+// mixin csscoder
+$ss-media-breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+);
+$ss-start-step-font-scale: sm;
+$ss-end-step-font-scale: xl;
+
+
+// new utilities classes
+.text-decor {
+  font-family: $font-family-serif !important;
+}
+.text-shadow {
+  text-shadow: 1px 1px 3px rgba(#000, .3);
+}
+.object-cover {
+  object-fit: cover;
+  object-position: center;
+}
+.mw-230 {
+  max-width: 200px;
+}
+.text-size-70 {
+  @include font-scale-var(40, 70);
+}
+.text-size-120 {
+  @include font-scale-var(90, 120);
+}

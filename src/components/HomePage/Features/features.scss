@@ -1,0 +1,48 @@
+///* features */
+///***********************************************/
+.features {
+  $self: &;
+  margin-top: -60px;
+  @include mq(lg) {
+    margin-top: -112px;
+  }
+
+  &__item {
+    background-color: $black;
+
+    &:before {
+      content: '';
+      display: block;
+      padding-top: 113%;
+    }
+
+    &-cover {
+      top: 0;
+      opacity: .8;
+      transition: $transition-fade;
+    }
+
+    &:hover {
+      #{$self}__item-cover {
+        opacity: .6;
+      }
+    }
+
+    &-title {
+      top: 50%;
+      transform: translateY(-50%);
+      left: 20px;
+      right: 20px;
+    }
+
+    &-button {
+      bottom: 30px;
+      left: 40px;
+      right: 40px;
+    }
+  }
+
+  &__content {
+    //margin-top: 70px;
+  }
+}

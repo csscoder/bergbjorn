@@ -1,0 +1,391 @@
+///***********************************************/
+//
+// SCSS MIX
+//
+// @description SCSS mixins and functions by CSSCODER
+// @see https://mix.csscoder.pro/
+//
+// @author Aleksandr Zidyganov
+// @see https://csscoder.pro
+// @see http://twitter.com/csscoder
+//
+///***********************************************/
+
+///* Default Variables */
+///***********************************************/
+
+///* columns and container */
+$ss-layout-gutter: 30px !default;
+$ss-columns-size: 12 !default;
+
+///* Media queries */
+$ss-media-type: 'only screen' !default;
+$ss-media-breakpoints: (
+  xs: 480px,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1600px
+) !default;
+
+///* transition */
+$ss-tr-duration: 200ms !default;
+$ss-tr-function: ease-in-out !default;
+
+///* PX2EM function */
+$ss-base-font-size: 16px !default;
+
+
+///* Font scale CSS variable */
+$ss-start-step-font-scale: xs !default;
+$ss-end-step-font-scale: xl !default;
+
+///* FUNCTIONS */
+///***********************************************/
+
+///* Raise a number to a power */
+@function _pow($x, $n) {
+  $result: 1;
+  @for $i from 1 through $n {
+    $result: $result * $x;
+  }
+  @return $result;
+}
+
+///* Remove the unit  */
+@function _strip-unit($value) {
+  @if type-of($value) == 'number' {
+    @return $value / ($value * 0 + 1);
+  }
+
+  @return $value;
+}
+
+///* Round a number to a specified decimal precision */
+@function _precision-round($float, $digits: 5) {
+  $pow: _pow(10, $digits);
+
+  @return round($float * $pow) / $pow;
+}
+
+///* PX to EM function */
+@function _convert-to-em($px, $base) {
+  @return _precision-round(_strip-unit($px) / _strip-unit($base) * 1em);
+}
+@function em($value, $base: $ss-base-font-size) {
+  $em_values: ();
+  @each $item in $value {
+    $em_values: append($em_values, _convert-to-em($item, $base));
+  }
+  @return $em_values;
+}
+
+///* MIXINS */
+///***********************************************/
+
+///* media queries breakpoints */
+@mixin mq($media) {
+  @if map-has-key($ss_media_breakpoints, $media) {
+    @media #{$ss_media_type} and (min-width: map-get($ss_media_breakpoints, $media)) {
+      @content;
+    }
+  }
+}
+
+@mixin mq-less($media) {
+  @if map-has-key($ss_media_breakpoints, $media) {
+    @media #{$ss_media_type} and (max-width: map-get($ss_media_breakpoints, $media) - 1px) {
+      @content;
+    }
+  }
+}
+
+@mixin mq-only($media) {
+  $steps_list: map-keys($ss_media_breakpoints);
+  @if map-has-key($ss_media_breakpoints, $media) {
+    $i: index(($ss_media_breakpoints), ($media map-get($ss_media_breakpoints, $media)));
+    @if $i < length($steps_list) {
+      $min: nth($steps_list, $i);
+      $max: nth($steps_list, $i + 1);
+      @if map-get($ss_media_breakpoints, $min) > 0 {
+        @media #{$ss_media_type} and (min-width: map-get($ss_media_breakpoints, $min)) and (max-width: map-get($ss_media_breakpoints, $max) - 1px) {
+          @content;
+        }
+      } @else {
+        @media #{$ss_media_type} and (max-width: map-get($ss_media_breakpoints, $max) - 1px) {
+          @content;
+        }
+      }
+    } @else {
+      @media #{$ss_media_type} and (min-width: map-get($ss_media_breakpoints, nth($steps_list, $i))) {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin mq-range($media_start: '', $media_end: '') {
+  $steps_list: map-keys($ss_media_breakpoints);
+
+  @if if(map-has-key($ss_media_breakpoints, $media_start) == true and map-has-key($ss_media_breakpoints, $media_end) == true, true, false) {
+    $range_values: (_strip-unit(map-get($ss_media_breakpoints, $media_start)), _strip-unit(map-get($ss_media_breakpoints, $media_end)));
+    $max-value: max($range_values...);
+    $min-value: min($range_values...);
+    @media #{$ss_media_type} and (min-width: #{$min-value}px) and (max-width: (#{$max-value - 1}px)) {
+      @content;
+    }
+  }
+
+  @if if(map-has-key($ss_media_breakpoints, $media_start) == true and map-has-key($ss_media_breakpoints, $media_end) == false, true, false) {
+    @media #{$ss_media_type} and (min-width: map-get($ss_media_breakpoints, $media_start)) {
+      @content;
+    }
+  }
+
+}
+
+///* container */
+@mixin container-fluid {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: $ss-layout-gutter/2;
+  padding-left: $ss-layout-gutter/2;
+}
+
+@mixin container($break1:null, $break2:null) {
+  @include container-fluid;
+  @if not $break1 and not $break2 {
+    @each $breakpoint, $value_media in $ss-media-breakpoints {
+      @media (min-width: $value_media) {
+        max-width: $value_media - $ss-layout-gutter;
+      }
+    }
+  } @else if $break1 and not $break2 {
+    $stop1: null;
+    @each $breakpoint, $value_media in $ss-media-breakpoints {
+      @if $breakpoint == $break1 {
+        $stop1: true;
+      }
+      @if $stop1 {
+        @media (min-width: $value_media) {
+          max-width: $value_media - $ss-layout-gutter;
+        }
+      }
+    }
+  } @else if $break1 and $break2 {
+    $stop1: null;
+    $stop2: null;
+    @each $breakpoint, $value_media in $ss-media-breakpoints {
+      @if $breakpoint == $break1 {
+        $stop1: true;
+      }
+      @if $stop1 and not $stop2 {
+        $stop2: true;
+        @media (min-width: $value_media) {
+          max-width: $value_media - $ss-layout-gutter;
+        }
+      }
+    }
+  }
+}
+
+///* columns */
+@mixin col($col, $length_line:1, $gutter: $ss-layout-gutter, $size: $ss-columns-size ) {
+  $_gutter: _strip-unit($gutter);
+  $s1: _precision_round($col / $size, 7);
+  $s2: _precision_round($s1 * 100);
+  $s3: _precision_round($_gutter - $_gutter * $s1);
+  $unit: unit($gutter);
+  @if $unit == '' {
+    $unit: 'px';
+  }
+
+  @if $unit == '%' {
+    width: #{$s2 - $s3 + '%'};
+  } @else {
+    width: calc(#{$s2 + '%'} - #{$s3 + $unit});
+  }
+
+  &:nth-child(1n) {
+    margin-right: #{$_gutter + $unit};
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:nth-child(#{$length_line}n) {
+    margin-right: 0;
+  }
+}
+
+@mixin col-offset($col, $gutter: $ss-layout-gutter, $size: $ss-columns-size ) {
+  $_gutter: _strip-unit($gutter);
+  $s1: _precision_round($col / $size, 7);
+  $s2: _precision_round($s1 * 100);
+  $s3: _precision_round($_gutter * $s1);
+  $unit: unit($gutter);
+  @if $unit == '' {
+    $unit: px;
+  }
+  @if $unit == '%' {
+    margin-left: #{$s2 + $s3 + '%'};
+  } @else {
+    margin-left: calc(#{$s2+'%'} + #{$s3+$unit});
+  }
+}
+
+///* Transitions */
+@mixin tr($props: all, $duration: $ss-tr-duration, $function: $ss-tr-function, $delay: null ) {
+
+  $duration: _strip-unit($duration)*1ms;
+  @if $delay {
+    $delay: _strip-unit($delay)*1ms;
+  }
+
+  @if type-of($props) == list {
+    $tr_values: ();
+    @each $item in $props {
+      @if $delay {
+        $tr_values: append($tr_values, #{$item} $duration $function $delay, comma);
+      } @else {
+        $tr_values: append($tr_values, #{$item} $duration $function, comma);
+      }
+    }
+    transition: $tr_values;
+  }
+
+  @else {
+    @if $delay {
+      transition: #{$props} $duration $function $delay;
+    } @else {
+      transition: #{$props} $duration $function;
+    }
+  }
+}
+
+///* triangle */
+///* triangle */
+@mixin triangle($direction: down, $size: 30px, $color: #20ba5b, $isEM: null, $baseFontSize: $ss-base-font-size){
+
+  $w: null;
+  $h: null;
+  $c: null;
+
+  $lengthSizeProps: length($size);
+
+  @each $item in $size {
+    $index: index(($size), ($item));
+    $value: _strip-unit($item)*1px;
+    @if $isEM {
+      $value: _precision-round(_strip-unit($value) / _strip-unit($baseFontSize))*1em;
+    }
+    @if($index == 1) {
+      $w: $value;
+      $h: $value;
+      $c: $value;
+    }
+    @if($index == 2) {
+      $h: $value;
+      $c: $value;
+    }
+    @if($index == 3) {
+      $c: $value;
+    }
+  }
+
+  $wHelper: $w;
+  $wHelper2: $c;
+
+  @if ($lengthSizeProps < 3) {
+    $wHelper: $w/2;
+    $wHelper2: $w/2;
+  } @else {
+    $wHelper: $wHelper - $wHelper2;
+  }
+
+  @if $direction == "down" {
+    border-top: $h solid $color;
+    border-right: $wHelper  solid transparent;
+    border-left: $wHelper2 solid transparent;
+  }
+
+  @if $direction == "up" {
+    border-bottom: $h solid $color;
+    border-right: $wHelper solid transparent;
+    border-left: $wHelper2 solid transparent;
+  }
+
+  @if $direction == "left" {
+    border-right: $h solid $color;
+    border-bottom: $wHelper solid transparent;
+    border-top: $wHelper2 solid transparent;
+  }
+
+  @if $direction == "right" {
+    border-left: $h solid $color;
+    border-bottom: $wHelper solid transparent;
+    border-top: $wHelper2 solid transparent;
+  }
+}
+
+///* Font scale */
+@mixin font-scale($font_min: 14px, $font_max: 16px, $firstBreakPoint: $ss-start-step-font-scale, $endBreakPoint: $ss-end-step-font-scale) {
+
+  $font_min: _strip-unit($font_min);
+  $font_max: _strip-unit($font_max);
+
+  // reverse fonts sizes if needed
+  $listFonts:  $font_min, $font_max;
+  $font_min: min($listFonts...);
+  $font_max: max($listFonts...);
+
+  // reverse breakpoint if needed
+  @if(_strip-unit(map-get($ss-media-breakpoints, $firstBreakPoint)) > _strip-unit(map-get($ss-media-breakpoints, $endBreakPoint)) ) {
+    $helper: $firstBreakPoint;
+    $firstBreakPoint: $endBreakPoint;
+    $endBreakPoint: $helper;
+  }
+
+  $width_min: _strip-unit(map-get($ss-media-breakpoints, $firstBreakPoint));
+  $width_max: _strip-unit(map-get($ss-media-breakpoints, $endBreakPoint));
+
+  $k: _precision_round(($font_max - $font_min) / ($width_max - $width_min), 4);
+  $b: _precision_round($font_min - ($k * $width_min), 4);
+  $l: $k * 100vw;
+
+  font-size: $font_min + px;
+
+  @include mq($firstBreakPoint) {
+    @if $b >= 0 {
+      font-size:  calc( #{$l} + #{$b + px} );
+    } @else {
+      $b: abs($b);
+      font-size:  calc( #{$l} - #{$b + px} );
+    }
+    outline: 0.0001vw;
+  }
+
+  @include mq($endBreakPoint) {
+    font-size: $font_max + px;
+  }
+}
+
+///* Font scale CSS variables */
+$_font-scale-var-min-width: _strip-unit(map-get($ss-media-breakpoints, $ss-start-step-font-scale));
+$_font-scale-var-max-width: _strip-unit(map-get($ss-media-breakpoints, $ss-end-step-font-scale));
+
+@mixin font-scale-var($font-min: 12, $font-max: 16) {
+  // reverse fonts sizes if needed
+  $listFonts:  $font-min, $font-max;
+  $font-min: min($listFonts...);
+  $font-max: max($listFonts...);
+
+  --minfz: #{_strip-unit($font-min)};
+  --maxfz: #{_strip-unit($font-max)};
+  font-size: var(--ssfz);
+  // fix for Safari resize re-render box
+  outline: 0.0001vw;
+}
