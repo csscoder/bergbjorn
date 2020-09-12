@@ -1,14 +1,39 @@
 ///* header */
 ///***********************************************/
+.sticky-wrapper {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 200;
+  min-width: 320px;
+}
+
 .header {
   $self: &;
   z-index: 10;
+  transition: background-color .15s;
+
+  .is-sticky & {
+    background-color: #fff;
+    box-shadow: $box-shadow;
+  }
+
+  &__navbar {
+    .is-sticky & {
+      padding-bottom: 0 !important;
+      padding-top: 20px !important;
+    }
+  }
 
   &__logo {
 
     &-img {
       width: 100px;
       filter: drop-shadow(2px 2px rgba(#000, 0.4));
+
+      .is-sticky & {
+        display: none;
+      }
 
       @include mq(sm) {
         width: 120px;
@@ -17,12 +42,29 @@
       @include mq(lg) {
         width: 180px;
       }
+
+      &.is-invert {
+        display: none;
+        filter: none;
+
+        .is-sticky & {
+          display: block;
+        }
+
+      }
     }
   }
 
   &__nav {
     font-size: 13px;
     font-weight: 500;
+    color: #fff;
+
+    .is-sticky & {
+      color: #1a2645;
+      padding-top: 0px !important;
+      padding-bottom: 10px !important;
+    }
   }
 
   &__social {
@@ -30,6 +72,11 @@
       color: $white;
       transition: $transition-base;
       position: relative;
+
+      .is-sticky & {
+        color: #1a2645;
+      }
+
       &:before {
         content: '';
         display: block;
@@ -45,5 +92,24 @@
       }
     }
 
+  }
+
+  &__hr {
+    .is-sticky & {
+      display: none;
+    }
+  }
+
+  .navbar-toggler {
+    .is-sticky & {
+      border-color: rgba($primary, .2);
+      color: $primary;
+    }
+
+    .navbar-toggler-icon {
+      .is-sticky & {
+        background-image: url('data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\' viewBox=\'0 0 30 30\'%3e%3cpath stroke=\'rgba%280, 0,0, 0.5%29\' stroke-linecap=\'round\' stroke-miterlimit=\'10\' stroke-width=\'2\' d=\'M4 7h22M4 15h22M4 23h22\'/%3e%3c/svg%3e')
+      }
+    }
   }
 }

@@ -1,7 +1,6 @@
 // Custom theme color
 @import 'csscoder.mixins';
 @import 'theme-bootstrap';
-@import 'common';
 
 // Import bootstrap SCSS components
 @import "../../node_modules/bootstrap/scss/functions";
@@ -45,4 +44,5 @@
 // import all files from components folder
 @import "../components/**/*.scss";
 
+@import 'common';
 
