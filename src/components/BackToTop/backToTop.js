@@ -11,7 +11,6 @@ $(document).ready(function(){
   });
 
   // scroll body to 0px on click
-  var btnItem = $('#back-to-top');
   btnItem.click(function () {
     btnItem.tooltip('hide');
     $('body,html').animate({

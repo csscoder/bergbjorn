@@ -1,15 +1,12 @@
 const { src, dest, parallel, watch, series } = require('gulp')
 const gulpif = require('gulp-if')
 const rename = require('gulp-rename')
-const replace = require('gulp-replace')
 const autoprefixer = require('autoprefixer')
 const mqpacker = require('css-mqpacker');
 const cssnano = require('cssnano');
 const postcssGulp = require('gulp-postcss');
 const gulpSCSS = require('gulp-sass');
 const del = require('del')
-const gutil = require('gulp-util')
-const fs = require('fs')
 const include = require("gulp-include")
 const beautify = require('gulp-jsbeautifier')
 const nunjucksRender = require('gulp-nunjucks-render')
@@ -18,25 +15,7 @@ const sourcemaps = require('gulp-sourcemaps')
 const Browser = require('browser-sync')
 
 const PRODUCTION = process.env.NODE_ENV === 'production'
-const pkg = require('./package.json')
 const browser = Browser.create()
-
-// // Start css
-// // ******************************************
-// function css() {
-//   const plugins = [
-//     autoprefixer(),
-//   ]
-//   return src('src/css/styles.css')
-//     .pipe(postcss(plugins))
-//     .pipe(dest('build/'))
-//     .pipe(gulpif(!PRODUCTION, browser.stream()))
-// }
-//
-// exports.css = css
-// // END css
-// // ******************************************
-
 
 // Start SCSS
 // ******************************************
