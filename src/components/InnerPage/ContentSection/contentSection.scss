@@ -1,0 +1,24 @@
+///* content-section */
+///***********************************************/
+.content-section {
+  $self: &;
+
+  &__cover {
+    height: 340px;
+    display: block;
+  }
+
+
+  &.is-theme1 {
+    background-color: $primary;
+  }
+
+  &__box {
+    &.is-theme1 {
+      background: url('../img/mountains1.svg') no-repeat 50% 0;
+    }
+    &.is-theme2 {
+      background: url('../img/mountains2.svg') no-repeat 50% 0;
+    }
+  }
+}

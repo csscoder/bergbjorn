@@ -1,0 +1,20 @@
+///* content-section */
+///***********************************************/
+.content-section {
+  $self: &;
+
+  &--bg {
+    position: relative;
+    &:before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      background: url('../img/mountains-bg.svg') 50% 0 no-repeat;
+      height: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1920px;
+      touch-action: none;
+    }
+  }
+}

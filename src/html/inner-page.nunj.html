@@ -1,0 +1,14 @@
+{% extends 'layouts/default.nunj.html' %}
+{% set title = "Inner page" %}
+
+{% block content %}
+  {% include '../components/Header/header.nunj.html' %}
+  {% include '../components/InnerPage/Hero/hero.nunj.html' %}
+  {% include '../components/InnerPage/ContentSection/contentSection.nunj.html' %}
+  {% include '../components/Footer/footer.nunj.html' %}
+  {% include '../components/BackToTop/backToTop.nunj.html' %}
+{% endblock %}
+
+{% block javaScript %}
+{% endblock %}
+

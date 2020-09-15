@@ -1,0 +1,27 @@
+///* hero */
+///***********************************************/
+.hero-inner {
+  $self: &;
+  min-height: 500px;
+  background-color: $black;
+
+  @include mq(lg) {
+    min-height: 770px;
+  }
+
+  &__title {
+    line-height: 1;
+    font-weight: 500;
+    z-index: 10;
+    letter-spacing: .2em;
+  }
+
+  &__cover {
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: .8;
+  }
+}

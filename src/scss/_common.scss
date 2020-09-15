@@ -24,3 +24,8 @@ body, .navbar {
 .btn-theme {
   @include button-variant(#1a2845, #1a2845, #0e3993, #0e3993, #022872);
 }
+
+// border
+.border-2 {
+  border-width: 2px !important;
+}

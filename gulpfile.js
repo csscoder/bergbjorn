@@ -13,9 +13,15 @@ const nunjucksRender = require('gulp-nunjucks-render')
 const sassGlob = require('gulp-sass-glob');
 const sourcemaps = require('gulp-sourcemaps')
 const Browser = require('browser-sync')
+const data = require('gulp-data');
+const projectPath = require('./config-helper/projectPath');
+const extend = require('./config-helper/extend');
 
 const PRODUCTION = process.env.NODE_ENV === 'production'
 const browser = Browser.create()
+const pkg = require(projectPath('package.json'));
+const moment = require('moment-timezone');
+const timeUpdate = moment().tz(pkg.clientTimeZone).format('DD MMM YYYY, HH:mm');
 
 // Start SCSS
 // ******************************************
@@ -131,7 +137,20 @@ const htmlBeauty = {
 }
 
 function html() {
+
+  const dataFunction = function () {
+    let dataForInfoPage = {
+      globalTimeBuild: timeUpdate,
+      globalTimeZone: pkg.clientTimeZone,
+      globalTitle: pkg.nameProject,
+      globalStartDate: pkg.startDate,
+      description: pkg.description
+    };
+    return extend(dataForInfoPage);
+  };
+
   return src('./src/html/*.nunj.html')
+    .pipe(data(dataFunction))
     .pipe(nunjucksRender({
       path: [
         './src/components/',
@@ -158,17 +177,29 @@ if (!PRODUCTION) {
     './src/components/**/*.scss',
   ], { events: ['change', 'add'], delay: 100 }, scss);
 
+  // watch(files, debounce(
+  //   gulp.series(lint, buildAppJs, buildIndex), WATCH_DEBOUNCE_DELAY
+  // ));
+
   watch([
     './src/js/*.js',
     './src/components/**/*.js',
   ], { events: ['change', 'add'], delay: 100 }, js);
 
   watch([
+    './src/img/**/*.*'
+  ], { events: ['change', 'add'], delay: 100 }, copyStatic);
+
+  watch([
     './src/**/*.nunj.html',
     './src/components/**/*.nunj.html',
-  ], { events: ['change', 'add'], delay: 100 }, html)
-
-  watch(['./build/*.html','./build/js/*.js']).on('change', () => browser.reload())
+  ], { events: ['change', 'add'], delay: 100 }, html);
+  //
+  // watch([
+  //   './build/*.html',
+  //   'build/js/*.js'
+  // // ]).on(['change', 'add'], () => browser.reload())
+  // ]).on('all', function (done) {browser.reload(); console.log('1221'); done();})
 }
 // End Watch
 // ******************************************
